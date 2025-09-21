@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+alembic
+python-dotenv
+psycopg2-binary  # для PostgreSQL
+python-jose[cryptography]  # для JWT токенів
+passlib[bcrypt]  # для хешування паролів
+python-multipart  # для завантаження файлів
+pydantic
