@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function App() {
+function App() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -8,12 +8,11 @@ export default function App() {
 
   async function register(e: React.FormEvent) {
     e.preventDefault();
-    const body = { username, email, password };
 
-    const r = await fetch("http://localhost:8000/auth/register", {
+    const r = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ username, email, password }),
     });
     const data = await r.json();
     setResp({ status: r.status, data });

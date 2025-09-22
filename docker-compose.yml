@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:15
     environment:
+      DB_HOST: db
+      DB_PORT: 5432
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: communication
@@ -27,10 +29,12 @@ services:
 
   frontend:
     build: ./frontend
+    env_file:
+      - ./frontend/.env
     depends_on:
       - backend
-    ports:
-      - "3000:80"
+    # ports:
+    #   - "3000:80"
 
 volumes:
   db_data:

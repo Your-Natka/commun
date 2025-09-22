@@ -1,19 +1,32 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from app.routers import auth, messages, files, users
-from app.websocket_manager import manager
-from app.db import init_db
-import os
+from .routers import auth, messages, files, users
+from .websocket_manager import manager
+from .db import init_db
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# CORS
+origins = [
+    "http://localhost:5173",  # порт Vite
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(auth.router, prefix="/auth")
 app.include_router(messages.router, prefix="/messages")
 app.include_router(files.router, prefix="/files")
 app.include_router(users.router, prefix="/users")
 
-@app.on_event("startup")
-async def startup():
-    await init_db()
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def root():

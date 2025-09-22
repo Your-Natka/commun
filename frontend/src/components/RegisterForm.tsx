@@ -2,16 +2,17 @@ import { useState } from "react";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");  // додаємо email
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://127.0.0.1:8000/auth/register", {
+      const res = await fetch("http://backend:8000/auth/register", {  // правильний хост
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, email, password }), // додаємо email
       });
 
       if (res.ok) {
@@ -33,6 +34,13 @@ export default function RegisterForm() {
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        className="border p-2 mb-2 w-full"
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         className="border p-2 mb-2 w-full"
       />
       <input
