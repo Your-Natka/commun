@@ -1,43 +1,18 @@
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime
+from pydantic import BaseModel, EmailStr
 
-class FileBase(BaseModel):
-    filename: str
-    url: str
-
-class FileCreate(FileBase):
-    pass
-
-class File(FileBase):
-    id: int
-    class Config:
-        orm_mode = True
-
-class MessageBase(BaseModel):
-    content: str
-
-class MessageCreate(MessageBase):
-    recipient_id: int
-    files: Optional[List[FileCreate]] = []
-
-class Message(MessageBase):
-    id: int
-    timestamp: datetime
-    sender_id: int
-    recipient_id: int
-    files: List[File] = []
-    class Config:
-        orm_mode = True
-
-class UserBase(BaseModel):
+class UserCreate(BaseModel):
     username: str
-    email: str
-
-class UserCreate(UserBase):
+    email: EmailStr
     password: str
 
-class User(UserBase):
+class UserOut(BaseModel):
     id: int
+    username: str
+    email: EmailStr
+
     class Config:
         orm_mode = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

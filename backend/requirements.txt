@@ -1,11 +1,8 @@
 fastapi
 uvicorn[standard]
-sqlalchemy[asyncio]
-asyncpg
-alembic
+sqlalchemy
+psycopg2-binary
+python-jose[cryptography]
+passlib[bcrypt]
 python-dotenv
-psycopg2-binary  # для PostgreSQL
-python-jose[cryptography]  # для JWT токенів
-passlib[bcrypt]  # для хешування паролів
-python-multipart  # для завантаження файлів
-pydantic
+python-multipart

@@ -1,30 +1,36 @@
-version: '3.9'
+version: "3.8"
+
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "8000:8000"
-    env_file: .env
-    depends_on:
-      - db
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-
   db:
     image: postgres:15
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: communication
-    ports:
-      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env   # optional, можна прописати тут перемінні
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/communication
+      SECRET_KEY: "replace-with-strong-secret"
+      ACCESS_TOKEN_EXPIRE_MINUTES: "1440"
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
 
 volumes:
   db_data:
