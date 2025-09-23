@@ -1,13 +1,10 @@
 export function createSocket(userId: number, token: string) {
-  const url = `ws://localhost:8000/ws/${userId}?token=${token}`;
-  const ws = new WebSocket(url);
+  const ws = new WebSocket(`ws://localhost:8000/ws/${userId}?token=${token}`);
 
-  ws.onopen = () => console.log("✅ WS connected");
-  ws.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    console.log("📩 Incoming:", data);
-  };
-  ws.onclose = () => console.log("❌ WS disconnected");
+  ws.onopen = () => console.log("WebSocket open");
+  ws.onmessage = (msg) => console.log("WS message:", msg.data);
+  ws.onclose = () => console.log("WS closed");
+  ws.onerror = (err) => console.error("WS error:", err);
 
   return ws;
 }
