@@ -20,10 +20,10 @@ app.add_middleware(
 )
 
 
-app.include_router(auth.router, prefix="/auth")
-app.include_router(messages.router, prefix="/messages")
-app.include_router(files.router, prefix="/files")
-app.include_router(users.router, prefix="/users")
+app.include_router(auth.router, prefix="/api/auth")
+app.include_router(messages.router, prefix="/api/messages")
+app.include_router(files.router, prefix="/api/files")
+app.include_router(users.router, prefix="/api/users")
 
 def init_db():
     Base.metadata.create_all(bind=engine)

@@ -9,17 +9,16 @@ export default function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://backend:8000/auth/register", {  // правильний хост
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }), // додаємо email
-      });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {  // префікс /api/auth
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
 
       if (res.ok) {
-        setMessage("Користувач зареєстрований!");
-      } else {
         const data = await res.json();
-        setMessage("Помилка: " + data.detail);
+        localStorage.setItem("token", data.access_token);
+        setMessage("Користувач зареєстрований!");
       }
     } catch (err) {
       setMessage("Помилка з'єднання з сервером");

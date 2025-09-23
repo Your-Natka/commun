@@ -26,6 +26,7 @@ Swagger бекенда: http://localhost:8000/docs
 
 
 
+
 3. Запусти сервер:
 
 uvicorn app.main:app --reload
@@ -66,3 +67,9 @@ docker exec -it commun-db-1 psql -U postgres -d postgres -c "SELECT * FROM users
 
 
 Тоді точно побачиш, чи користувачі збережені.
+
+1️⃣ Перевірка, що контейнери працюють
+
+В корені проекту виконай:
+
+
