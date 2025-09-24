@@ -31,7 +31,7 @@ const ChatPage: React.FC = () => {
     formData.append("content", content);
     files.forEach((file) => formData.append("files", file));
 
-    const res = await axios.post("/api/messages", formData, {
+    const res = await axios.post("/api/messages/all", formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setMessages([...messages, res.data]);
