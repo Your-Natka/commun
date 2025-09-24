@@ -50,8 +50,8 @@ docker compose up -d
 -d запускає їх у фоні (detached mode).
 
 Потім перевір, чи працюють контейнери:
-
-docker ps
+docker compose up -d
+docker compose ps
 
 
 Там має бути commun-db-1, commun-backend-1, commun-frontend-1.
@@ -72,4 +72,12 @@ docker exec -it commun-db-1 psql -U postgres -d postgres -c "SELECT * FROM users
 
 В корені проекту виконай:
 
+При запиті токена ми в консолі пишемо 
+curl -X POST "http://localhost:8000/api/auth/token" \
+>   -H "Content-Type: application/x-www-form-urlencoded" \
+>   -d "grant_type=password&username=Ivan&password=678789&scope="
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsImV4cCI6MTc1ODgxNTgwOX0.1QmdkAwiLcunxxZo7XvOKca1w9lhBnVjYBH1MbOE6dM","token_type":
 
+Перевірка токена 
+curl -X GET "http://localhost:8000/api/me" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsImV4cCI6MTc1ODgxNTgwOX0.1QmdkAwiLcunxxZo7XvOKca1w9lhBnVjYBH1MbOE6dM"
