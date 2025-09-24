@@ -1,60 +1,58 @@
-import React, { useState } from "react";
-import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");  // додаємо email
   const [password, setPassword] = useState("");
-  const [resp, setResp] = useState<any>(null);
-  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
-  async function register(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const r = await api.post("/api/auth/register", { username, email, password });
-      setResp({ status: r.status, data: r.data });
-      if (r.status === 200) navigate("/login"); // після успішної реєстрації на логін
-    } catch (err: any) {
-      setResp({
-        status: err.response?.status || 500,
-        data: err.response?.data || { error: "Server error" },
-      });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {  // префікс /api/auth
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.access_token);
+        setMessage("Користувач зареєстрований!");
+      }
+    } catch (err) {
+      setMessage("Помилка з'єднання з сервером");
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white shadow p-6 rounded">
-        <h1 className="text-xl font-semibold mb-4">Register</h1>
-        <form onSubmit={register} className="space-y-3">
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            className="w-full p-2 border rounded"
-          />
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="w-full p-2 border rounded"
-          />
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            type="password"
-            className="w-full p-2 border rounded"
-          />
-          <button className="w-full bg-blue-600 text-white py-2 rounded">Register</button>
-        </form>
-        {resp && (
-          <pre className="mt-4 text-sm bg-gray-100 p-2 rounded overflow-x-auto">
-            {JSON.stringify(resp, null, 2)}
-          </pre>
-        )}
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
+      <h2 className="text-xl font-bold mb-4">Реєстрація</h2>
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="border p-2 mb-2 w-full"
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="border p-2 mb-2 w-full"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="border p-2 mb-2 w-full"
+      />
+      <button type="submit" className="bg-blue-500 text-white p-2 w-full">
+        Зареєструватися
+      </button>
+      {message && <p className="mt-2 text-red-500">{message}</p>}
+    </form>
   );
 }
