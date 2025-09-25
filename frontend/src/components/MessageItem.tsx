@@ -12,6 +12,7 @@ interface MessageItemProps {
   content: string;
   files?: FileAttachment[];
   isOwnMessage?: boolean;
+  isRead?: boolean;
   onDelete?: (id: number) => void;
   onEdit?: (id: number, newContent: string) => void;
 }
@@ -22,6 +23,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
   content,
   files,
   isOwnMessage,
+  isRead,
   onDelete,
   onEdit,
 }) => {
@@ -80,20 +82,27 @@ const MessageItem: React.FC<MessageItemProps> = ({
         ))}
 
       {isOwnMessage && !isEditing && (
-        <div className="flex space-x-2 text-xs mt-1">
-          {onDelete && (
-            <button onClick={() => onDelete(id)} className="text-red-500">
-              Delete
-            </button>
-          )}
-          {onEdit && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="text-green-500"
-            >
-              Edit
-            </button>
-          )}
+        <div className="flex flex-col text-xs mt-1">
+          <div className="flex space-x-2">
+            {onDelete && (
+              <button onClick={() => onDelete(id)} className="text-red-500">
+                Delete
+              </button>
+            )}
+            {onEdit && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="text-green-500"
+              >
+                Edit
+              </button>
+            )}
+          </div>
+
+          {/* 👇 Статус прочитання */}
+          <div className="text-gray-500 mt-1">
+            {isRead ? "✓✓ Read" : "✓ Sent"}
+          </div>
         </div>
       )}
     </div>
